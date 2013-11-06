@@ -1,7 +1,6 @@
 package goparser
 
 import (
-	"fmt"
 	"go/ast"
 )
 
