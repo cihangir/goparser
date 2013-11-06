@@ -8,10 +8,16 @@ import (
 )
 
 type ParsedFile struct {
-	Name      string
-	Path      string
+	Name string
+	Path string
+	// tests implemented
+	PackageName string
+	// tests implemented
+	Imports []*ParsedImports
+	// tests are completed
 	Functions []*ParsedFunc
-	Structs   []*ParsedStruct
+
+	Structs []*ParsedStruct
 }
 
 func (pf *ParsedFile) GetExportedFunctions() []*ParsedFunc {
@@ -34,6 +40,12 @@ func ParseFile(fileName string) (*ParsedFile, error) {
 		fmt.Println("err", err)
 		return nil, err
 	}
+
+	// set package name
+	file.PackageName = node.Name.String()
+
+	// parse imports
+	file.Imports = parseImports(node.Imports)
 
 	for _, decl := range node.Decls {
 		switch decl.(type) {
