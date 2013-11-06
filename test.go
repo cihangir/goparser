@@ -1,6 +1,7 @@
 package goparser
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -50,6 +51,7 @@ type Filter struct {
 type Filter2 struct {
 }
 
+// this is documentation for MethodWithNoInputNoOutput
 func (f *Filter) MethodWithNoInputNoOutput() {
 
 }
@@ -58,7 +60,7 @@ func (f *Filter) MethodWithInputNoOutput(input string) {
 }
 
 func (f *Filter) MethodWithInputOutput(input string) string {
-	return ""
+	return fmt.Sprintf("%s", "hede")
 }
 
 func (f *Filter) MethodWithMultipleInputOutput(input1, input2 string) string {
@@ -88,6 +90,11 @@ func (f *Filter) methodWithMultipleInputOutputNotShared(input1, input2 string) s
 
 func (f *Filter) methodWithMultiple2InputOutputNotShared(input1 string, input2 string) string {
 	return ""
+}
+
+// this is documentation for MethodWith2Input2Output
+func (f *Filter) MethodWith2Input2Output(firstParam, secondParam string) (string, string) {
+	return "first", "second"
 }
 
 // @Data.Validate.Permission
