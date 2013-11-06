@@ -16,13 +16,10 @@ type ParsedFunc struct {
 
 type ParsedFuncParam struct {
 	Name   string
-	TypeOf ast.Expr
+	TypeOf string
 }
 
 func (pf *ParsedFunc) ConvertToJSFunc() string {
-	fmt.Println("pf.Receiver")
-	fmt.Println(pf.Receiver)
-
 	name := pf.Name
 	incomingParameters := ""
 	if len(pf.IncomingParams) > 0 {
@@ -82,7 +79,7 @@ func parseFunctions(fun *ast.FuncDecl) *ParsedFunc {
 			for _, name := range v.Names {
 				incomingParams = append(incomingParams, &ParsedFuncParam{
 					Name:   name.String(),
-					TypeOf: v.Type,
+					TypeOf: v.Type.(*ast.Ident).String(),
 				})
 			}
 		}
@@ -97,13 +94,13 @@ func parseFunctions(fun *ast.FuncDecl) *ParsedFunc {
 				for _, name := range v.Names {
 					outgoingParameters = append(outgoingParameters, &ParsedFuncParam{
 						Name:   name.String(),
-						TypeOf: v.Type,
+						TypeOf: v.Type.(*ast.Ident).String(),
 					})
 				}
 			} else {
 				pd := &ParsedFuncParam{
 					Name:   "",
-					TypeOf: v.Type,
+					TypeOf: v.Type.(*ast.Ident).String(),
 				}
 				outgoingParameters = append(outgoingParameters, pd)
 
@@ -130,6 +127,7 @@ func getReceiver(rec *ast.FieldList) string {
 		typeOf := list[0].Type
 
 		switch typeOf.(type) {
+		// it is not only starExpr
 		case *ast.StarExpr:
 			return fmt.Sprintf("%v", typeOf.(*ast.StarExpr).X)
 		default:
