@@ -12,7 +12,7 @@ type ParsedStruct struct {
 
 type StructField struct {
 	Name          string
-	TypeOf        ast.Expr
+	TypeOf        string
 	Documentation string
 }
 
@@ -97,12 +97,21 @@ func parseStructFields(structType *ast.StructType) []*StructField {
 
 	for _, field := range structType.Fields.List {
 		// normalize the parameters
+		var typeOf string
+		switch field.Type.(type) {
+		case *ast.SelectorExpr:
+			typeOf = field.Type.(*ast.SelectorExpr).Sel.String()
+		case *ast.Ident:
+			typeOf = field.Type.(*ast.Ident).String()
+		}
+
 		for _, name := range field.Names {
+
 			// instead of using Doc.Text() we can handle them seperately! wtf
 			structFields = append(structFields,
 				&StructField{
 					Name:          name.String(),
-					TypeOf:        field.Type,
+					TypeOf:        typeOf,
 					Documentation: field.Doc.Text(),
 				})
 		}
