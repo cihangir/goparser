@@ -63,60 +63,118 @@ var _ = Describe("Reading file", func() {
 			firstFunction := file.Functions[0]
 			Expect(firstFunction.Receiver).To(ContainSubstring("Filter"))
 		})
+		Context("when functions have parameters", func() {
+			Context("when functions have incoming parameters", func() {
+				It("function should have imcoming parameters property", func() {
+					for _, fun := range file.Functions {
+						if fun.Name == "MethodWith2Input2Output" {
+							Expect(len(fun.IncomingParams)).To(Equal(2))
+						}
+					}
+				})
+				It("function should have imcoming firstParam property", func() {
+					for _, fun := range file.Functions {
+						if fun.Name == "MethodWith2Input2Output" {
+							Expect(fun.IncomingParams[0].Name).To(ContainSubstring("firstParam"))
+						}
+					}
+				})
+				It("function should have imcoming secondParam property", func() {
+					for _, fun := range file.Functions {
+						if fun.Name == "MethodWith2Input2Output" {
+							Expect(fun.IncomingParams[1].Name).To(ContainSubstring("secondParam"))
+						}
+					}
+				})
+				It("function should have outgoing parameters type property", func() {
+					for _, fun := range file.Functions {
+						if fun.Name == "MethodWith2Input2Output" {
+							Expect(fun.OutgoingParams[0].TypeOf).To(Equal("string"))
+						}
+					}
+				})
 
-		It("function should have imcoming parameters property", func() {
-			for _, fun := range file.Functions {
-				if fun.Name == "MethodWith2Input2Output" {
-					Expect(len(fun.IncomingParams)).To(Equal(2))
-				}
-			}
-		})
-		It("function should have imcoming firstParam property", func() {
-			for _, fun := range file.Functions {
-				if fun.Name == "MethodWith2Input2Output" {
-					Expect(fun.IncomingParams[0].Name).To(ContainSubstring("firstParam"))
-				}
-			}
-		})
-
-		It("function should have imcoming secondParam property", func() {
-			for _, fun := range file.Functions {
-				if fun.Name == "MethodWith2Input2Output" {
-					Expect(fun.IncomingParams[1].Name).To(ContainSubstring("secondParam"))
-				}
-			}
+			})
+			Context("when functions have outgoing parameters", func() {
+				It("function should have outgoing parameters property", func() {
+					for _, fun := range file.Functions {
+						if fun.Name == "MethodWith2Input2Output" {
+							Expect(len(fun.OutgoingParams)).To(Equal(2))
+						}
+					}
+				})
+				It("function should have imcoming parameters type property", func() {
+					for _, fun := range file.Functions {
+						if fun.Name == "MethodWith2Input2Output" {
+							Expect(fun.IncomingParams[0].TypeOf).To(Equal("string"))
+						}
+					}
+				})
+			})
 		})
 
-		It("function should have outgoing parameters property", func() {
-			for _, fun := range file.Functions {
-				if fun.Name == "MethodWith2Input2Output" {
-					Expect(len(fun.OutgoingParams)).To(Equal(2))
+		Context("when functions doesnt have parameters", func() {
+			It("should not have inccmoing parameters", func() {
+				for _, fun := range file.Functions {
+					if fun.Name == "MethodWithNoInputNoOutput" {
+						Expect(len(fun.IncomingParams)).To(Equal(0))
+					}
 				}
-			}
+			})
+			It("should not have outgoing parameters", func() {
+				for _, fun := range file.Functions {
+					if fun.Name == "MethodWithNoInputNoOutput" {
+						Expect(len(fun.OutgoingParams)).To(Equal(0))
+					}
+				}
+			})
 		})
 
-		It("function should have imcoming parameters type property", func() {
-			for _, fun := range file.Functions {
-				if fun.Name == "MethodWith2Input2Output" {
-					Expect(fun.IncomingParams[0].TypeOf).To(Equal("string"))
-				}
-			}
-		})
-
-		It("function should have outgoing parameters type property", func() {
-			for _, fun := range file.Functions {
-				if fun.Name == "MethodWith2Input2Output" {
-					Expect(fun.OutgoingParams[0].TypeOf).To(Equal("string"))
-				}
-			}
-		})
-
-		It("function, name property should be empty string", func() {
+		It("for functions name property should be empty string", func() {
 			for _, fun := range file.Functions {
 				if fun.Name == "MethodWith2Input2Output" {
 					Expect(fun.OutgoingParams[0].Name).To(Equal(""))
 				}
 			}
+		})
+		Context("when file have structs", func() {
+			It("should have more than one struct", func() {
+				structs := file.Structs
+				Expect(len(structs)).NotTo(BeZero())
+			})
+			It("should have name", func() {
+				structs := file.Structs[0]
+				Expect(structs.Name).To(Equal("Filter"))
+			})
+			It("should have fields", func() {
+				structs := file.Structs[0]
+				Expect(len(structs.Fields)).NotTo(Equal(0))
+			})
+			Context("when struct has fields", func() {
+				It("should have more than one field", func() {
+					structs := file.Structs[0]
+					Expect(len(structs.Fields)).NotTo(Equal(0))
+				})
+				It("should have more than one field", func() {
+					structs := file.Structs[0]
+					Expect(len(structs.Fields)).NotTo(Equal(0))
+				})
+				var stt *StructField
+				BeforeEach(func() {
+					stt = file.Structs[0].Fields[0]
+				})
+				Context("when struct has field", func() {
+					It("should have name", func() {
+						Expect(stt.Name).To(Equal("minAge"))
+					})
+					It("should have type", func() {
+						Expect(stt.TypeOf).To(Equal("int"))
+					})
+					It("should have documentation", func() {
+						Expect(stt.Documentation).To(ContainSubstring("@Data"))
+					})
+				})
+			})
 		})
 	})
 
@@ -137,24 +195,3 @@ var _ = Describe("Reading file", func() {
 	})
 
 })
-
-// var _ = Describe("Parsing whole content", func() {
-// 	var (
-// 		file *ParsedFile
-// 		err  error
-// 	)
-
-// 	BeforeEach(func() {
-// 		file, err = ParseFile("test.go")
-// 	})
-
-// 	Context("When parsing successfull", func() {
-// 		It("should return false", func() {
-// 			Expect(false).To(BeFalse())
-// 		})
-// 		It("should not error", func() {
-// 			Expect(err).NotTo(HaveOccured())
-// 		})
-// 	})
-
-// })
