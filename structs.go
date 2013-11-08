@@ -75,6 +75,11 @@ func parseStructs(specs []ast.Spec) *ParsedStruct {
 			//     Name    string    // identifier name
 			//     Obj     *Object   // denoted object; or nil
 			// }
+		case *ast.SelectorExpr:
+			// type SelectorExpr struct {
+			//    X   Expr   // expression
+			//    Sel *Ident // field selector
+			// }
 
 		default:
 			panic(fmt.Sprintf("unimplemented: %T", typ))
