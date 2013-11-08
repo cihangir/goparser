@@ -3,7 +3,6 @@ package goparser
 import (
 	"fmt"
 	"go/ast"
-	"strconv"
 )
 
 type ParsedFunc struct {
@@ -17,36 +16,6 @@ type ParsedFunc struct {
 type ParsedFuncParam struct {
 	Name   string
 	TypeOf string
-}
-
-func (pf *ParsedFunc) ConvertToJSFunc() string {
-	name := pf.Name
-	incomingParameters := ""
-	if len(pf.IncomingParams) > 0 {
-		comma := ", "
-		for _, param := range pf.IncomingParams {
-			incomingParameters += param.Name
-			incomingParameters += comma
-		}
-	}
-	incomingParameters += "callback"
-
-	outParameters := ""
-	if len(pf.OutgoingParams) > 0 {
-		comma := ""
-		for i, param := range pf.OutgoingParams {
-			if param.Name == "" {
-				outParameters += "param" + strconv.Itoa(i)
-			} else {
-				outParameters += param.Name
-			}
-			outParameters += comma
-			comma = ", "
-
-		}
-	}
-	outParameters = "err, res"
-	return fmt.Sprintf("function %s (%s) { return callback %s}", name, incomingParameters, outParameters)
 }
 
 // type FuncDecl struct {

@@ -20,16 +20,6 @@ type ParsedFile struct {
 	Structs []*ParsedStruct
 }
 
-func (pf *ParsedFile) GetExportedFunctions() []*ParsedFunc {
-	ef := make([]*ParsedFunc, 0)
-	for _, fun := range pf.Functions {
-		if ast.IsExported(fun.Name) {
-			ef = append(ef, fun)
-		}
-	}
-	return ef
-}
-
 func ParseFile(fileName string) (*ParsedFile, error) {
 	fset := token.NewFileSet() // positions are relative to fset
 
