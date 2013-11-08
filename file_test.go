@@ -1,7 +1,8 @@
-package goparser
+package goparser_test
 
 import (
 	"fmt"
+	// "testing"
 	"time"
 )
 
@@ -16,6 +17,7 @@ var Variable2 string
 // Operations on multiple sets are consistent in that the elements
 // of each set used was valid at exactly one point in time between the
 // start and thepackage test
+// type Hede testing.T
 
 // gede
 type Filter struct {
@@ -52,7 +54,7 @@ type Filter2 struct {
 }
 
 // this is documentation for MethodWithNoInputNoOutput
-func (f *Filter) MethodWithNoInputNoOutput() {
+func (f *Filter) TestMethodWithNoInputNoOutput() {
 
 }
 
