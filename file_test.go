@@ -2,7 +2,7 @@ package goparser_test
 
 import (
 	"fmt"
-	// "testing"
+	"testing"
 	"time"
 )
 
@@ -48,6 +48,9 @@ type Filter struct {
 	//@Data.Validate.Format("format")
 	CreatedAt time.Time `bson:"createdAt" json:"createdAt"`
 }
+
+// *ast.SelectorExpr:
+type Ee testing.T
 
 // gede
 type Filter2 struct {
