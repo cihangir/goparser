@@ -39,13 +39,16 @@ var _ = Describe("Reading file", func() {
 			Expect(file.PackageName).To(Equal("goparser_test"))
 		})
 		It("should consist 2 imports", func() {
-			Expect(len(file.Imports)).To(Equal(2))
+			Expect(len(file.Imports)).To(Equal(3))
 		})
 		It("should consist fmt imports", func() {
 			Expect(file.Imports[0].Path).To(ContainSubstring("fmt"))
 		})
 		It("should consist time imports", func() {
-			Expect(file.Imports[1].Path).To(ContainSubstring("time"))
+			Expect(file.Imports[1].Path).To(ContainSubstring("testing"))
+		})
+		It("should consist time imports", func() {
+			Expect(file.Imports[2].Path).To(ContainSubstring("time"))
 		})
 		It("should have 12 number of functions", func() {
 			Expect(len(file.Functions)).To(Equal(13))
