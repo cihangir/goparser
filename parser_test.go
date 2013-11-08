@@ -19,7 +19,7 @@ var _ = Describe("Reading file", func() {
 	)
 
 	BeforeEach(func() {
-		file, err = ParseFile("test.go")
+		file, err = ParseFile("file_test.go")
 	})
 
 	Context("When parsing successfull", func() {
@@ -30,13 +30,13 @@ var _ = Describe("Reading file", func() {
 			Expect(err).NotTo(HaveOccured())
 		})
 		XIt("should have file name", func() {
-			Expect(file.Name).To(Equal("test.go"))
+			Expect(file.Name).To(Equal("file_test.go"))
 		})
 		XIt("should consist path", func() {
-			Expect(file.Name).To(Equal("test.go"))
+			Expect(file.Name).To(Equal("file_test.go"))
 		})
 		It("should consist package name", func() {
-			Expect(file.PackageName).To(Equal("goparser"))
+			Expect(file.PackageName).To(Equal("goparser_test"))
 		})
 		It("should consist 2 imports", func() {
 			Expect(len(file.Imports)).To(Equal(2))
