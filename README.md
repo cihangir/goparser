@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/siesta/goparser.png)](https://travis-ci.org/siesta/goparser)
 
+[![Coverage Status](https://coveralls.io/repos/siesta/goparser/badge.png)](https://coveralls.io/r/siesta/goparser)
 
 goparser
 ========
