@@ -48,7 +48,7 @@ func parseFunctions(fun *ast.FuncDecl) *ParsedFunc {
 			for _, name := range v.Names {
 				incomingParams = append(incomingParams, &ParsedFuncParam{
 					Name:   name.String(),
-					TypeOf: v.Type.(*ast.Ident).String(),
+					TypeOf: getType(v.Type),
 				})
 			}
 		}
@@ -63,13 +63,13 @@ func parseFunctions(fun *ast.FuncDecl) *ParsedFunc {
 				for _, name := range v.Names {
 					outgoingParameters = append(outgoingParameters, &ParsedFuncParam{
 						Name:   name.String(),
-						TypeOf: v.Type.(*ast.Ident).String(),
+						TypeOf: getType(v.Type),
 					})
 				}
 			} else {
 				pd := &ParsedFuncParam{
 					Name:   "",
-					TypeOf: v.Type.(*ast.Ident).String(),
+					TypeOf: getType(v.Type),
 				}
 				outgoingParameters = append(outgoingParameters, pd)
 
@@ -84,6 +84,31 @@ func parseFunctions(fun *ast.FuncDecl) *ParsedFunc {
 	return parsedFunc
 }
 
+func getType(v interface{}) string {
+	var typeOf string
+	switch v.(type) {
+	case *ast.Ident:
+		typeOf = v.(*ast.Ident).String()
+	case *ast.SelectorExpr:
+		typeOf = fmt.Sprintf("%v", v.(*ast.SelectorExpr).X)
+	case *ast.StarExpr:
+		typeOf = fmt.Sprintf("%v", v.(*ast.StarExpr).X)
+	case *ast.ArrayType, *ast.MapType:
+		typeOf = "[]"
+	case *ast.InterfaceType:
+		typeOf = "Object"
+	case *ast.FuncType:
+		typeOf = "function"
+	case *ast.Ellipsis:
+		typeOf = "ellipsis"
+	case *ast.ChanType:
+		typeOf = "chan"
+	default:
+		panic(fmt.Sprintf("%T uncompleted incoming type", v))
+	}
+	return typeOf
+}
+
 // type FieldList struct {
 //         Opening token.Pos // position of opening parenthesis/brace, if any
 //         List    []*Field  // field list; or nil
@@ -93,15 +118,7 @@ func parseFunctions(fun *ast.FuncDecl) *ParsedFunc {
 func getReceiver(rec *ast.FieldList) string {
 	if rec != nil {
 		list := rec.List
-		typeOf := list[0].Type
-
-		switch typeOf.(type) {
-		// it is not only starExpr
-		case *ast.StarExpr:
-			return fmt.Sprintf("%v", typeOf.(*ast.StarExpr).X)
-		default:
-			panic("uncompleted reciever type parsing")
-		}
+		return getType(list[0].Type)
 	} else {
 		return ""
 	}
