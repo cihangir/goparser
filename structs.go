@@ -80,6 +80,7 @@ func parseStructs(specs []ast.Spec) *ParsedStruct {
 			//    X   Expr   // expression
 			//    Sel *Ident // field selector
 			// }
+		case *ast.FuncType, *ast.InterfaceType:
 
 		default:
 			panic(fmt.Sprintf("unimplemented: %T", typ))
